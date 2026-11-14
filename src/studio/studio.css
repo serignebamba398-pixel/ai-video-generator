@@ -1,0 +1,120 @@
+:root {
+  --studio-ink: #142033;
+  --studio-muted: #34445a;
+  --studio-border: #d6e0eb;
+  --studio-accent: #245cba;
+}
+html { font-size: 18px !important; }
+.stApp {
+  background: #f3f6fa;
+  color: var(--studio-ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+[data-testid="stSidebar"] {
+  background: #e8eef6;
+  border-right: 1px solid var(--studio-border);
+  min-width: 310px;
+}
+[data-testid="stSidebar"] h2 { color: #244e87; }
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stWidgetLabel"] p,
+[data-baseweb="select"],
+.stButton button p,
+.stFormSubmitButton button p {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 18px !important;
+  line-height: 1.6 !important;
+  font-weight: 400;
+}
+[data-testid="stWidgetLabel"] p { font-weight: 600 !important; }
+[data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p,
+[data-testid="stCaptionContainer"] small {
+  font-size: 17px !important;
+  line-height: 1.6 !important;
+  color: var(--studio-muted) !important;
+  opacity: 1 !important;
+}
+[data-baseweb="select"] [role="combobox"],
+[data-baseweb="select"] [data-testid="stMarkdownContainer"],
+[data-baseweb="select"] > div,
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] span {
+  font-size: 17px !important;
+  color: var(--studio-ink) !important;
+}
+.stMainBlockContainer,
+[data-testid="stMainBlockContainer"],
+.main .block-container {
+  width: 100%;
+  max-width: none !important;
+  padding: 2.2rem clamp(1rem, 2vw, 3rem) 4rem;
+}
+h1 { font-size: 36px !important; font-weight: 700 !important; letter-spacing: normal; }
+h2 { font-size: 27px !important; font-weight: 600 !important; letter-spacing: normal; padding-top: 1.5rem !important; }
+h3 { font-size: 1.15rem !important; font-weight: 600 !important; color: #244e87; }
+[data-testid="stCaptionContainer"] { color: var(--studio-muted); }
+[data-testid="stExpander"] { background: #fff; border: 1px solid var(--studio-border); border-radius: 6px; box-shadow: none; }
+[data-testid="stExpander"] summary { padding: .8rem 1rem; background: #edf3fc; }
+[data-testid="stExpander"] summary p { font-size: 1rem; font-weight: 600; }
+[data-testid="stForm"] { border: 1px solid var(--studio-border); border-radius: 6px; }
+[data-testid="stMetric"] { padding: .6rem 0; border-bottom: 1px solid var(--studio-border); }
+[data-testid="stMetricValue"] { font-size: 1.65rem; font-weight: 550; }
+.stButton button, .stFormSubmitButton button { border-radius: 4px; box-shadow: none; min-height: 2.5rem; }
+button[kind="primary"] { background: var(--studio-accent); border-color: var(--studio-accent); color: #fff; }
+button:focus-visible, summary:focus-visible { outline: 2px solid var(--studio-accent) !important; outline-offset: 3px; }
+textarea, input {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  color: #142033 !important;
+  -webkit-text-fill-color: #142033;
+}
+textarea::placeholder, input::placeholder { color: #526176 !important; opacity: 1; }
+button[kind="primary"] p { color: #fff !important; }
+textarea { background: #fff !important; }
+video {
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  max-height: 440px;
+  object-fit: contain;
+  background: #172235;
+  border-radius: 6px;
+}
+video:fullscreen { max-width: none; max-height: none; height: 100%; }
+[data-testid="stAlert"] { border-radius: 4px; }
+/* Paired editing frames: preserve the image and let the prompt use the height. */
+[class*="st-key-scene_image_frame_"] [data-testid="stImage"] {
+  width: 100%;
+}
+[class*="st-key-scene_image_frame_"] img {
+  display: block;
+  width: 100%;
+  height: 660px;
+  object-fit: contain;
+}
+/* Target the actual editor, including sessions using the previous widget key. */
+textarea[aria-label^="Prompt scène"],
+[class*="st-key-scene_prompt_text_"] textarea {
+  height: 560px !important;
+  min-height: 560px !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  resize: vertical !important;
+}
+[data-testid="stTextArea"]:has(textarea[aria-label^="Prompt scène"]),
+[data-testid="stTextArea"]:has(textarea[aria-label^="Prompt scène"]) [data-baseweb="textarea"] {
+  height: auto !important;
+  min-height: 560px !important;
+  max-height: none !important;
+}
+@media (max-width: 760px) {
+  .stMainBlockContainer,
+  [data-testid="stMainBlockContainer"],
+  .main .block-container { padding: 1.4rem 1rem; }
+  h1 { font-size: 1.65rem !important; }
+  [data-testid="stSidebar"] { min-width: 0; }
+  video { max-height: 320px; }
+}

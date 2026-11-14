@@ -1,0 +1,6 @@
+streamlit
+Pillow
+requests
+python-dotenv
+edge-tts
+mutagen

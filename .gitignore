@@ -1,0 +1,29 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+
+# FFmpeg local binaries (Windows, inutile sur Linux)
+tools/
+ffmpeg-9.0.2-essentials_build/
+
+# Fichiers générés
+audio/
+videos/
+uploads/
+outputs/
+
+# Studio 2
+instance_2/
+
+# Archives
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db
