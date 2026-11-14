@@ -187,6 +187,13 @@ def render_delivery(plan, production_state, director_plan=None):
     if raw_video.exists():
         st.header("Montage brut")
         st.video(str(raw_video), width=800)
+        st.download_button(
+            label="Télécharger le montage brut",
+            data=raw_video.read_bytes(),
+            file_name="montage_brut.mp4",
+            mime="video/mp4",
+            use_container_width=True,
+        )
         st.caption(
             "final_video_raw.mp4 — scènes normalisées et assemblées. La musique, les ambiances et le traitement audio final seront ajoutés en post-production."
         )
@@ -194,6 +201,13 @@ def render_delivery(plan, production_state, director_plan=None):
     if final_video.exists():
         st.header("Master final")
         st.video(str(final_video), width=800)
+        st.download_button(
+            label="Télécharger le master final",
+            data=final_video.read_bytes(),
+            file_name="master_final.mp4",
+            mime="video/mp4",
+            use_container_width=True,
+        )
         st.caption(str(final_video.resolve()))
     assembly_history = sorted(
         (path for path in (current_job.job_dir / "history" / "assembly").glob("*/*.mp4")
