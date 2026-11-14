@@ -476,6 +476,13 @@ def render_scene(scene, plan, production_state, director_plan):
             preview_path = latest_scene_video(job.job_dir, scene.number)
             if preview_path is not None:
                 st.video(str(preview_path), width=800)
+                st.download_button(
+                    label=f"Télécharger la scène {scene.number}",
+                    data=preview_path.read_bytes(),
+                    file_name=f"scene_{scene.number:02d}.mp4",
+                    mime="video/mp4",
+                    use_container_width=True,
+                )
                 st.caption(f"Scène {scene.number} · {preview_path.name}")
                 if preview_path != video_path:
                     st.info("Version précédente conservée. Génère puis valide une nouvelle vidéo pour utiliser les modifications dans le montage.")
