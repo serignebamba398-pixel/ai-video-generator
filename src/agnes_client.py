@@ -15,6 +15,7 @@ from src.config import (
     AGNES_BASE_URL,
     AGNES_IMAGE_MODEL,
     AGNES_MODEL,
+    AGNES_VIDEO2VIDEO_MODEL,
 )
 
 
@@ -72,9 +73,8 @@ class AgnesClient:
         api_key: str = AGNES_API_KEY,
         base_url: str = AGNES_BASE_URL,
         model: str = AGNES_MODEL,
-        image_model: str = (
-            AGNES_IMAGE_MODEL
-        ),
+        image_model: str = AGNES_IMAGE_MODEL,
+        video2video_model: str = AGNES_VIDEO2VIDEO_MODEL,
         timeout: int = 120,
     ) -> None:
 
@@ -84,9 +84,8 @@ class AgnesClient:
         )
 
         self.model = model
-        self.image_model = (
-            image_model
-        )
+        self.image_model = image_model
+        self.video2video_model = video2video_model
 
         self.timeout = timeout
 
@@ -520,6 +519,69 @@ class AgnesClient:
                     retry_delay
                 ),
             )
+        )
+
+    # ======================================================
+    # VIDEO TO VIDEO
+    # ======================================================
+
+    def create_video_to_video(
+        self,
+        prompt: str,
+        reference_video_path: Path,
+        seconds: int,
+        size: str = "720P",
+        aspect_ratio: str = "16:9",
+        character_image_paths: Optional[list[Path]] = None,
+        max_retries: int = 1,
+        retry_delay: int = 30,
+    ) -> str:
+        """
+        Video-to-video mode (Agnes Video 2.5 non-Flash).
+
+        Prend une vidéo de référence et génère une nouvelle vidéo
+        en conservant les mouvements, actions et cadrage,
+        mais en remplaçant les personnages selon le prompt
+        et les images de référence des personnages.
+
+        - reference_video_path : vidéo source (mouvements conservés)
+        - character_image_paths : images de référence des nouveaux personnages (max 5)
+        - prompt : décrit les nouveaux personnages et ce qui doit changer
+        """
+
+        character_image_paths = list(character_image_paths or [])
+
+        if len(character_image_paths) > 5:
+            raise AgnesAPIError(
+                "Agnes Video 2.5 accepte au maximum "
+                "5 images de référence de personnages."
+            )
+
+        reference_video_data = self._file_to_data_uri(
+            Path(reference_video_path)
+        )
+
+        payload = {
+            "model": self.video2video_model,
+            "prompt": prompt,
+            "mode": "reference",
+            "seconds": str(seconds),
+            "size": size,
+            "aspect_ratio": aspect_ratio,
+            "n": 1,
+            "videos": [reference_video_data],
+        }
+
+        if character_image_paths:
+            payload["images"] = [
+                self._file_to_data_uri(p)
+                for p in character_image_paths
+            ]
+
+        return self._submit_video_request(
+            payload=payload,
+            max_retries=max_retries,
+            retry_delay=retry_delay,
         )
 
     # ======================================================

@@ -45,6 +45,11 @@ AGNES_MODEL = (
     "agnes-video-2.5-flash"
 )
 
+# Agnes Video 2.5 (non-Flash) : supporte les vidéos de référence (video-to-video)
+AGNES_VIDEO2VIDEO_MODEL = (
+    "agnes-video-2.5"
+)
+
 AGNES_TEXT_MODEL = (
     "agnes-3.0-flash"
 )
