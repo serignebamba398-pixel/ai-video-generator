@@ -15,6 +15,7 @@ from src.studio.actions import (
     delete_scene_reference,
     get_agnes,
     get_current_job_id,
+    get_scene_reference,
     persist_production_state,
     save_scene_reference,
 )
@@ -101,9 +102,16 @@ def render_image_panel(
                     st.toast("Cette image est déjà enregistrée. La vidéo est conservée.")
                     return production_state
                 save_scene_reference(uploaded, scene.number)
-                production_state = invalidate_scene_image(
-                    production_state, scene.number
-                )
+                # Auto-valide l'image dès l'enregistrement
+                new_image_path = get_scene_reference(job, scene.number)
+                try:
+                    production_state = validate_scene_image(
+                        production_state, scene.number, new_image_path
+                    )
+                except Exception:
+                    production_state = invalidate_scene_image(
+                        production_state, scene.number
+                    )
                 persist_production_state(production_state)
                 st.rerun()
     image_button1 = image_button2 = st.container(horizontal=True)

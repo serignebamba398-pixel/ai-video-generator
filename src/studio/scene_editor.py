@@ -348,6 +348,13 @@ def render_scene(scene, plan, production_state, director_plan):
                 production_state, scene.number, image_path
             )
             content_ok = is_scene_content_validated(production_state, scene)
+            # Auto-confirme le prompt si les conditions sont remplies
+            if include_scene and not content_ok and bool(
+                (scene.visual_prompt or "").strip() and image_ok
+            ):
+                production_state = validate_scene_content(production_state, scene)
+                persist_production_state(production_state)
+                content_ok = True
             action_bar = st.container(horizontal=True, gap="small")
             check1, check3, check4 = st.columns(3)
             check1.caption("Montage : incluse" if include_scene else "Montage : exclue")
@@ -356,27 +363,7 @@ def render_scene(scene, plan, production_state, director_plan):
                 "Prompt : confirmé" if content_ok else "Prompt : à confirmer"
             )
             if include_scene:
-                can_validate_content = bool(
-                    (scene.visual_prompt or "").strip() and image_ok
-                )
-                if not content_ok:
-                    if action_bar.button(
-                        (
-                            "Confirmer le prompt"
-                            if st.session_state.audio_mode == "Agnes natif"
-                            else "Confirmer le dialogue et le prompt"
-                        ),
-                        key=f"validate_scene_content_{get_current_job_id()}_{scene.number}",
-                        type="primary",
-                        disabled=not can_validate_content,
-                        use_container_width=False,
-                    ):
-                        production_state = validate_scene_content(
-                            production_state, scene
-                        )
-                        persist_production_state(production_state)
-                        st.rerun()
-                elif action_bar.button(
+                if action_bar.button(
                     "Retirer validation de la scène",
                     key=f"unvalidate_scene_content_{get_current_job_id()}_{scene.number}",
                     use_container_width=False,
@@ -387,10 +374,6 @@ def render_scene(scene, plan, production_state, director_plan):
                     persist_production_state(production_state)
                     delete_final_video(job)
                     st.rerun()
-                if not can_validate_content:
-                    st.caption(
-                        "Pour valider la scène : prompt non vide et image validée si le mode avec image est activé."
-                    )
             video_ready = scene_is_ready(production_state, scene, image_path)
             if (
                 scene.dialogue.strip()
