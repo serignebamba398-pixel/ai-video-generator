@@ -19,7 +19,7 @@ def render_sidebar():
         )
         synchronize_job()
         st.selectbox("Format", ("9:16", "16:9"), key="aspect_ratio")
-        st.selectbox("Taille vidéo", ("720P",), key="video_size")
+        st.selectbox("Taille vidéo", ("720P", "1080P"), key="video_size")
         st.divider()
         st.subheader("Audio")
         st.selectbox("Mode audio", ("Agnes natif", "Voix contrôlées"), key="audio_mode")
